@@ -25,6 +25,7 @@ architecture rtl of uart is
 	signal packet : std_logic_vector(10 downto 0);
 	signal txDone, rxDone : std_logic;
 	signal parityBit: std_logic;
+	signal i : integer := 0;
 	
 	-- https://surf-vhdl.com/vhdl-for-loop-statement/#:~:text=The%20FOR%2DLOOP%20statement%20is%20used%20whenever%20an%20operation%20needs,in%20the%20other%20SW%20languages.
 	-- https://vhdlwhiz.com/function/
@@ -44,5 +45,16 @@ architecture rtl of uart is
 begin
 	
 	parityBit <= calcParity(data);
+	packet <= '0' & data & parityBit & '1';
+	
+	process(CLOCK_50) is
+		begin
+		if rising_edge(CLOCK_50) then
+			if i < 11 then
+				UART_TXD <= packet(i);
+				i <= i + 1;
+			end if;
+		end if;
+	end process;
 
 end rtl;
