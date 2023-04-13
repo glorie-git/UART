@@ -1,5 +1,5 @@
 Analysis & Synthesis report for uart
-Thu Apr 13 12:33:39 2023
+Thu Apr 13 13:28:45 2023
 Quartus Prime Version 22.1std.0 Build 915 10/25/2022 SC Lite Edition
 
 
@@ -43,7 +43,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                        ;
 +------------------------------------+------------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Thu Apr 13 12:33:39 2023          ;
+; Analysis & Synthesis Status        ; Successful - Thu Apr 13 13:28:45 2023          ;
 ; Quartus Prime Version              ; 22.1std.0 Build 915 10/25/2022 SC Lite Edition ;
 ; Revision Name                      ; uart                                           ;
 ; Top-level Entity Name              ; uart                                           ;
@@ -257,7 +257,7 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 22.1std.0 Build 915 10/25/2022 SC Lite Edition
-    Info: Processing started: Thu Apr 13 12:33:22 2023
+    Info: Processing started: Thu Apr 13 13:28:29 2023
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off uart -c uart
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
@@ -269,6 +269,8 @@ Warning (10541): VHDL Signal Declaration warning at uart.vhd(14): used implicit 
 Warning (10541): VHDL Signal Declaration warning at uart.vhd(15): used implicit default value for signal "LEDR" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
 Warning (10541): VHDL Signal Declaration warning at uart.vhd(16): used implicit default value for signal "UART_TXD" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 16
 Warning (10541): VHDL Signal Declaration warning at uart.vhd(19): used implicit default value for signal "UART_RTS" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 19
+Warning (10540): VHDL Signal Declaration warning at uart.vhd(24): used explicit default value for signal "data" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 24
+Warning (10036): Verilog HDL or VHDL warning at uart.vhd(27): object "parityBit" assigned a value but never read File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 27
 Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "LEDG[0]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
     Warning (13410): Pin "LEDG[1]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
@@ -329,10 +331,10 @@ Warning (21074): Design contains 25 input pin(s) that do not drive logic
 Info (21057): Implemented 53 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 25 input pins
     Info (21059): Implemented 28 output pins
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 60 warnings
-    Info: Peak virtual memory: 4801 megabytes
-    Info: Processing ended: Thu Apr 13 12:33:39 2023
-    Info: Elapsed time: 00:00:17
-    Info: Total CPU time (on all processors): 00:00:34
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 62 warnings
+    Info: Peak virtual memory: 4796 megabytes
+    Info: Processing ended: Thu Apr 13 13:28:45 2023
+    Info: Elapsed time: 00:00:16
+    Info: Total CPU time (on all processors): 00:00:33
 
 

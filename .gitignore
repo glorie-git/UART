@@ -1,3 +1,5 @@
 docs/
 *.bak
 db/
+output_files/
+incremental_db/
