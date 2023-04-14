@@ -7,28 +7,36 @@ use ieee.numeric_std.all;
 -- Entity part of the description.  Describes inputs and outputs
 
 entity uart is
+	generic(
+			CLOCK_INT : integer := 50000000;
+			baudRate : integer := 9600
+			);
 	 port(
-			CLOCK_50 : in  std_logic;  -- Clock pin
-			KEY : in  std_logic_vector(3 downto 0):= (others => '0');  -- push button switches
-			SW : in  std_logic_vector(17 downto 0) := (others => '0');  -- slider switches
-			LEDG : out std_logic_vector(7 downto 0);  -- green lights
-			LEDR : out std_logic_vector(17 downto 0);  -- red lights
+			FAST_CLOCK : in  std_logic;  -- Clock pin
+			DATA : in std_logic_vector(7 downto 0);
+			-- KEY : in  std_logic_vector(3 downto 0):= (others => '0');  -- push button switches
+			-- SW : in  std_logic_vector(17 downto 0) := (others => '0');  -- slider switches
+			-- LEDG : out std_logic_vector(7 downto 0);  -- green lights
+			-- LEDR : out std_logic_vector(17 downto 0);  -- red lights
 			UART_TXD : out std_logic;
-			UART_RXD : in  std_logic := '0';
-			UART_CTS : in  std_logic := '0';
-			UART_RTS : out std_logic := '1'
+			UART_RXD : in  std_logic; -- := 'X';
+			UART_CTS : in  std_logic; -- := '1';
+			UART_RTS : out std_logic
 		 );
 end uart;
 
 architecture rtl of uart is
-	signal data : std_logic_vector(7 downto 0) := "11010000";
+	signal tx_data : std_logic_vector(7 downto 0); -- := "11010000";
+	signal rx_data : std_logic_vector(7 downto 0); -- := "00000000";
 	signal packet : std_logic_vector(10 downto 0);
+	signal rx_packet : std_logic_vector(10 downto 0) := (others => 'X');
 	signal parityBit: std_logic;
 	signal i : integer := 0;
---	signal baudRate : integer := 9600;
-	signal baudRate : integer := 10;
-	signal clock : std_logic := '0';
+	-- signal baudRate : integer := 9600;
+	-- signal baudRate : integer := 10;
+	signal baudClock : std_logic := '0';
 	signal baudRateCounter : integer := 0;
+	signal number : integer := CLOCK_INT/(2*baudRate);
 	
 	-- https://surf-vhdl.com/vhdl-for-loop-statement/#:~:text=The%20FOR%2DLOOP%20statement%20is%20used%20whenever%20an%20operation%20needs,in%20the%20other%20SW%20languages.
 	-- https://vhdlwhiz.com/function/
@@ -48,7 +56,7 @@ architecture rtl of uart is
 	 
 	 -- state machine
 	 type STATES is (idle, create_packet, transmit, process_bits, parity_check, store_display);
-	 signal state : states;
+	 signal state : states := idle;
 	 signal resetb : std_logic := '0';
 	 
 	 -- constrol signals
@@ -66,96 +74,107 @@ architecture rtl of uart is
 	 
 begin
 	
+	tx_data <= DATA;
 	parityBit <= calcParity(data);
---	packet <= '0' & data & parityBit & '1';
 	
---	-- send packet
---	process(clock) is
---		begin
---		if rising_edge(clock) then
---			if i < 11 then
---				UART_TXD <= packet(i);
---				i <= i + 1;
---			end if;
---		end if;
---	end process;
-	
-	baudRateGenerator: process(CLOCK_50) is
+	baudRateGenerator: process(FAST_CLOCK) is
 	begin
-		if rising_edge(CLOCK_50) then
+		if rising_edge(FAST_CLOCK) then
 			baudRateCounter <= baudRateCounter + 1;
-			if baudRateCounter = baudRate then
-				clock <= '1';
+			if baudRateCounter = number then
+				baudClock <= not baudClock;
 				baudRateCounter <= 0;
-			else
-				clock <= '0';
+			-- else
+			-- 	baudClock <= '0';
 			end if;
 		end if;
 	end process;
-	
---	 type STATES is (idle, create_packet, transmit, process_bits, parity_check, store_display);
 	 
-	fms : process (CLOCK_50, clock) is
+	fms : process (FAST_CLOCK, baudClock) is
 	begin
 		case state is
 			when idle =>
 				UART_RTS <= '1';
 				txDone <= '0';
+				parity_err <= '1';
+				pkt_process_done <= '0';
+				parity_err_check_done <= '0';
 				
 			when create_packet =>
 				UART_RTS <= '0';
 				txDone <= '0';
-				
+				parity_err <= '1';
+				pkt_process_done <= '0';
 				packet <= '0' & data & parityBit & '1';
+				
 				pkt_create_done <= '1';
 			when transmit =>
 				UART_RTS <= '0';
-				-- send packet
---				process(clock) is
---					begin
-					if rising_edge(clock) then
-						if i < 11 then
-							UART_TXD <= packet(i);
-							i <= i + 1;
-							txDone <= '0';
-						else
-							i <= 0;
-							txDone <= '1';
-						end if;
+				parity_err <= '1';
+				pkt_process_done <= '0';
+				parity_err_check_done <= '0';
+				
+				if rising_edge(baudClock) then
+					if i < 11 then
+						UART_TXD <= packet(i);
+						i <= i + 1;
+						txDone <= '0';
+					else
+						i <= 0;
+						txDone <= '1';
 					end if;
---				end process;
+				end if;
+
 			when process_bits =>
 				UART_RTS <= '0';
 				txDone <= '0';
+				parity_err <= '1';
+				parity_err_check_done <= '0';
+				
+				if rising_edge(baudClock) then
+					if i < 11 then
+						rx_packet(i) <= UART_RXD;
+						i <= i + 1;
+						rxDone <= '0';
+					else
+						i <= 0;
+						pkt_process_done <= '1';
+						rx_data <= rx_packet(8 downto 1);
+						rxDone <= '1';
+					end if;
+				end if;
+				
 			when parity_check =>
 				UART_RTS <= '0';
 				txDone <= '0';
+				pkt_process_done <= '0';
+				
+				if rx_packet(9) = calcParity(rx_data) then
+					parity_err <= '0';
+				else
+					parity_err <= '1';
+				end if;
+				parity_err_check_done <= '1';
+			
 			when store_display =>
 				UART_RTS <= '0';
 				txDone <= '0';
+				parity_err <= '1';
+				pkt_process_done <= '0';
+				parity_err_check_done <= '0';	
 		end case;
 	end process;
-	
-	 -- constrol signals
---	 signal sync_err : std_logic;
 	 
-	 -- constrol signals: transmitter
---	 signal txDone : std_logic;
---	 signal pkt_create_done : std_logic;
-	 
-	 -- constrol signals: receiver
---	 signal pkt_process_done : std_logic;
---	 signal parity_err : std_logic;
---	 signal rxDone : std_logic;
-	 
-	next_state_logic : process (CLOCK_50, clock) is
+	next_state_logic : process (FAST_CLOCK, baudClock, rx_packet) is
 	begin
 		case state is
 			when idle =>
-				if UART_CTS = '1' then
+				if UART_CTS = '0' then -- if we want to transmit we check cts first
+					if rising_edge(baudClock) then
+						state <= process_bits;
+					end if;
+				elsif UART_CTS = '1' then
 					state <= create_packet;
---				elsif UART_RTS = '1' then
---					state <= process_bits;
 				else
 					state <= idle;
 				end if;

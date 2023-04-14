@@ -8,37 +8,37 @@ z2
 !i10f 100
 cModel Technology
 dC:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/LAB/LAB4/lab4/task3_bonus/simulation/modelsim
-Euart
-Z0 w1681423967
+Etb_uart
+Z0 w1681514255
 Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
 Z4 dC:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/simulation/modelsim
-Z5 8C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd
-Z6 FC:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd
+Z5 8C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/tb_uart.vhd
+Z6 FC:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/tb_uart.vhd
 l0
-L9
-VdJDGg1MN]JA^Waef1?f2J0
-!s100 >VgcYSC3?6;DU?LKEUX792
+L7
+V@7mG^VQR]2Q8Mj2g]dBIM0
+!s100 BYQVl:LX8CCc?0W;lTlhg3
 Z7 OV;C;10.5b;63
 32
-Z8 !s110 1681423970
+Z8 !s110 1681514347
 !i10b 1
-Z9 !s108 1681423970.000000
-Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd|
-Z11 !s107 C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd|
+Z9 !s108 1681514347.000000
+Z10 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/tb_uart.vhd|
+Z11 !s107 C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/tb_uart.vhd|
 !i113 1
 Z12 o-work work -2002 -explicit
 Z13 tExplicit 1 CvgOpt 0
-Artl
+Atb
 R1
 R2
 R3
-Z14 DEx4 work 4 uart 0 22 dJDGg1MN]JA^Waef1?f2J0
-l67
-L23
-Vn2Cd;3G_fzVb:Ve[4QccR3
-!s100 0L1Y41d1gKoO@ebS;ScL51
+Z14 DEx4 work 7 tb_uart 0 22 @7mG^VQR]2Q8Mj2g]dBIM0
+l73
+L10
+Z15 VmGDCP55CW<iBz;<5o6?313
+Z16 !s100 >i6JE=9[Md?0GY>J576790
 R7
 32
 R8
@@ -46,6 +46,47 @@ R8
 R9
 R10
 R11
+!i113 1
+R12
+R13
+Euart
+Z17 w1681514341
+R1
+R2
+R3
+R4
+Z18 8C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd
+Z19 FC:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd
+l0
+L9
+VTY0=a1_d]bTSTcOE=6C@>2
+!s100 ELo=S;MHF5g:Dg3VL^nVh0
+R7
+32
+R8
+!i10b 1
+R9
+Z20 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd|
+Z21 !s107 C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd|
+!i113 1
+R12
+R13
+Artl
+R1
+R2
+R3
+DEx4 work 4 uart 0 22 TY0=a1_d]bTSTcOE=6C@>2
+l75
+L28
+VNn5[UCgbNDkKdXePYE9Ta1
+!s100 D2R^_`3K1zj`PY56XFYBB3
+R7
+32
+R8
+!i10b 1
+R9
+R20
+R21
 !i113 1
 R12
 R13
