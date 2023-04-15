@@ -1,5 +1,5 @@
 Analysis & Synthesis report for uart
-Thu Apr 13 14:43:15 2023
+Sat Apr 15 15:47:19 2023
 Quartus Prime Version 22.1std.0 Build 915 10/25/2022 SC Lite Edition
 
 
@@ -13,10 +13,14 @@ Quartus Prime Version 22.1std.0 Build 915 10/25/2022 SC Lite Edition
   5. Analysis & Synthesis Source Files Read
   6. Analysis & Synthesis Resource Usage Summary
   7. Analysis & Synthesis Resource Utilization by Entity
-  8. General Register Statistics
-  9. Post-Synthesis Netlist Statistics for Top Partition
- 10. Elapsed Time Per Partition
- 11. Analysis & Synthesis Messages
+  8. User-Specified and Inferred Latches
+  9. Logic Cells Representing Combinational Loops
+ 10. General Register Statistics
+ 11. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 12. Parameter Settings for User Entity Instance: Top-level Entity: |uart
+ 13. Post-Synthesis Netlist Statistics for Top Partition
+ 14. Elapsed Time Per Partition
+ 15. Analysis & Synthesis Messages
 
 
 
@@ -43,16 +47,16 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                        ;
 +------------------------------------+------------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Thu Apr 13 14:43:15 2023          ;
+; Analysis & Synthesis Status        ; Successful - Sat Apr 15 15:47:19 2023          ;
 ; Quartus Prime Version              ; 22.1std.0 Build 915 10/25/2022 SC Lite Edition ;
 ; Revision Name                      ; uart                                           ;
 ; Top-level Entity Name              ; uart                                           ;
 ; Family                             ; Cyclone IV E                                   ;
-; Total logic elements               ; 90                                             ;
-;     Total combinational functions  ; 90                                             ;
-;     Dedicated logic registers      ; 66                                             ;
-; Total registers                    ; 66                                             ;
-; Total pins                         ; 53                                             ;
+; Total logic elements               ; 176                                            ;
+;     Total combinational functions  ; 176                                            ;
+;     Dedicated logic registers      ; 0                                              ;
+; Total registers                    ; 0                                              ;
+; Total pins                         ; 22                                             ;
 ; Total virtual pins                 ; 0                                              ;
 ; Total memory bits                  ; 0                                              ;
 ; Embedded Multiplier 9-bit elements ; 0                                              ;
@@ -172,36 +176,36 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------+-----------------+-----------------+-----------------------------------------------------------------------------------------------------------------------------+---------+
 
 
-+-----------------------------------------------------+
-; Analysis & Synthesis Resource Usage Summary         ;
-+---------------------------------------------+-------+
-; Resource                                    ; Usage ;
-+---------------------------------------------+-------+
-; Estimated Total logic elements              ; 90    ;
-;                                             ;       ;
-; Total combinational functions               ; 90    ;
-; Logic element usage by number of LUT inputs ;       ;
-;     -- 4 input functions                    ; 20    ;
-;     -- 3 input functions                    ; 2     ;
-;     -- <=2 input functions                  ; 68    ;
-;                                             ;       ;
-; Logic elements by mode                      ;       ;
-;     -- normal mode                          ; 29    ;
-;     -- arithmetic mode                      ; 61    ;
-;                                             ;       ;
-; Total registers                             ; 66    ;
-;     -- Dedicated logic registers            ; 66    ;
-;     -- I/O registers                        ; 0     ;
-;                                             ;       ;
-; I/O pins                                    ; 53    ;
-;                                             ;       ;
-; Embedded Multiplier 9-bit elements          ; 0     ;
-;                                             ;       ;
-; Maximum fan-out node                        ; clock ;
-; Maximum fan-out                             ; 33    ;
-; Total fan-out                               ; 438   ;
-; Average fan-out                             ; 1.67  ;
-+---------------------------------------------+-------+
++-----------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary               ;
++---------------------------------------------+-------------+
+; Resource                                    ; Usage       ;
++---------------------------------------------+-------------+
+; Estimated Total logic elements              ; 176         ;
+;                                             ;             ;
+; Total combinational functions               ; 176         ;
+; Logic element usage by number of LUT inputs ;             ;
+;     -- 4 input functions                    ; 62          ;
+;     -- 3 input functions                    ; 76          ;
+;     -- <=2 input functions                  ; 38          ;
+;                                             ;             ;
+; Logic elements by mode                      ;             ;
+;     -- normal mode                          ; 145         ;
+;     -- arithmetic mode                      ; 31          ;
+;                                             ;             ;
+; Total registers                             ; 0           ;
+;     -- Dedicated logic registers            ; 0           ;
+;     -- I/O registers                        ; 0           ;
+;                                             ;             ;
+; I/O pins                                    ; 22          ;
+;                                             ;             ;
+; Embedded Multiplier 9-bit elements          ; 0           ;
+;                                             ;             ;
+; Maximum fan-out node                        ; Selector3~0 ;
+; Maximum fan-out                             ; 38          ;
+; Total fan-out                               ; 583         ;
+; Average fan-out                             ; 2.65        ;
++---------------------------------------------+-------------+
 
 
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -209,9 +213,104 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+---------------------+-------------+--------------+
 ; Compilation Hierarchy Node ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name ; Entity Name ; Library Name ;
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+---------------------+-------------+--------------+
-; |uart                      ; 90 (90)             ; 66 (66)                   ; 0           ; 0            ; 0       ; 0         ; 53   ; 0            ; |uart               ; uart        ; work         ;
+; |uart                      ; 176 (176)           ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 22   ; 0            ; |uart               ; uart        ; work         ;
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+---------------------+-------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++----------------------------------------------------------------------------------------------------+
+; User-Specified and Inferred Latches                                                                ;
++-----------------------------------------------------+---------------------+------------------------+
+; Latch Name                                          ; Latch Enable Signal ; Free of Timing Hazards ;
++-----------------------------------------------------+---------------------+------------------------+
+; rx_data[0]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[1]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[2]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[3]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[4]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[5]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[6]$latch                                    ; rx_data[7]          ; yes                    ;
+; rx_data[7]$latch                                    ; rx_data[7]          ; yes                    ;
+; UART_TXD$latch                                      ; LessThan0           ; yes                    ;
+; rx_packet[1]                                        ; Decoder0            ; yes                    ;
+; i[31]                                               ; Selector7           ; yes                    ;
+; i[4]                                                ; Selector7           ; yes                    ;
+; i[5]                                                ; Selector7           ; yes                    ;
+; i[6]                                                ; Selector7           ; yes                    ;
+; i[7]                                                ; Selector7           ; yes                    ;
+; i[8]                                                ; Selector7           ; yes                    ;
+; i[9]                                                ; Selector7           ; yes                    ;
+; i[10]                                               ; Selector7           ; yes                    ;
+; i[11]                                               ; Selector7           ; yes                    ;
+; i[12]                                               ; Selector7           ; yes                    ;
+; i[13]                                               ; Selector7           ; yes                    ;
+; i[14]                                               ; Selector7           ; yes                    ;
+; i[15]                                               ; Selector7           ; yes                    ;
+; i[16]                                               ; Selector7           ; yes                    ;
+; i[17]                                               ; Selector7           ; yes                    ;
+; i[18]                                               ; Selector7           ; yes                    ;
+; i[19]                                               ; Selector7           ; yes                    ;
+; i[20]                                               ; Selector7           ; yes                    ;
+; i[21]                                               ; Selector7           ; yes                    ;
+; i[22]                                               ; Selector7           ; yes                    ;
+; i[23]                                               ; Selector7           ; yes                    ;
+; i[24]                                               ; Selector7           ; yes                    ;
+; i[25]                                               ; Selector7           ; yes                    ;
+; i[26]                                               ; Selector7           ; yes                    ;
+; i[27]                                               ; Selector7           ; yes                    ;
+; i[28]                                               ; Selector7           ; yes                    ;
+; i[29]                                               ; Selector7           ; yes                    ;
+; i[30]                                               ; Selector7           ; yes                    ;
+; i[3]                                                ; Selector7           ; yes                    ;
+; i[2]                                                ; Selector7           ; yes                    ;
+; i[0]                                                ; Selector7           ; yes                    ;
+; i[1]                                                ; Selector7           ; yes                    ;
+; rx_packet[2]                                        ; Decoder0            ; yes                    ;
+; rx_packet[3]                                        ; Decoder0            ; yes                    ;
+; rx_packet[4]                                        ; Decoder0            ; yes                    ;
+; rx_packet[5]                                        ; Decoder0            ; yes                    ;
+; rx_packet[6]                                        ; Decoder0            ; yes                    ;
+; rx_packet[7]                                        ; Decoder0            ; yes                    ;
+; rx_packet[8]                                        ; Decoder0            ; yes                    ;
+; packet[9]                                           ; Selector1           ; yes                    ;
+; packet[8]                                           ; Selector1           ; yes                    ;
+; packet[7]                                           ; Selector1           ; yes                    ;
+; packet[4]                                           ; Selector1           ; yes                    ;
+; packet[5]                                           ; Selector1           ; yes                    ;
+; packet[6]                                           ; Selector1           ; yes                    ;
+; packet[3]                                           ; Selector1           ; yes                    ;
+; packet[2]                                           ; Selector1           ; yes                    ;
+; packet[1]                                           ; Selector1           ; yes                    ;
+; rxDone                                              ; state~2             ; yes                    ;
+; rx_packet[9]                                        ; Decoder0            ; yes                    ;
+; data[7]                                             ; rx_data[7]          ; yes                    ;
+; data[6]                                             ; rx_data[7]          ; yes                    ;
+; data[5]                                             ; rx_data[7]          ; yes                    ;
+; data[4]                                             ; rx_data[7]          ; yes                    ;
+; data[3]                                             ; rx_data[7]          ; yes                    ;
+; data[2]                                             ; rx_data[7]          ; yes                    ;
+; data[1]                                             ; rx_data[7]          ; yes                    ;
+; data[0]                                             ; rx_data[7]          ; yes                    ;
+; parity_err_check_done                               ; Selector1           ; yes                    ;
+; pkt_process_done                                    ; GND                 ; yes                    ;
+; Number of user-specified and inferred latches = 70  ;                     ;                        ;
++-----------------------------------------------------+---------------------+------------------------+
+Note: All latches listed above may not be present at the end of synthesis due to various synthesis optimizations.
+
+
++------------------------------------------------------------+
+; Logic Cells Representing Combinational Loops               ;
++--------------------------------------------------------+---+
+; Logic Cell Name                                        ;   ;
++--------------------------------------------------------+---+
+; UART_RTS~1                                             ;   ;
+; state~2                                                ;   ;
+; txDone~0                                               ;   ;
+; WideOr1~0                                              ;   ;
+; parity_err~0                                           ;   ;
+; Number of logic cells representing combinational loops ; 5 ;
++--------------------------------------------------------+---+
+Note: All cells listed above may not be present at the end of synthesis due to various synthesis optimizations.
 
 
 +------------------------------------------------------+
@@ -219,14 +318,33 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 66    ;
+; Total registers                              ; 0     ;
 ; Number of registers using Synchronous Clear  ; 0     ;
 ; Number of registers using Synchronous Load   ; 0     ;
 ; Number of registers using Asynchronous Clear ; 0     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 33    ;
+; Number of registers using Clock Enable       ; 0     ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
+; 4:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; No         ; |uart|Selector38           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
+
+
++----------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |uart ;
++----------------+----------+------------------------------------------+
+; Parameter Name ; Value    ; Type                                     ;
++----------------+----------+------------------------------------------+
+; CLOCK_INT      ; 50000000 ; Signed Integer                           ;
++----------------+----------+------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
 
 
 +-----------------------------------------------------+
@@ -234,23 +352,18 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; boundary_port         ; 53                          ;
-; cycloneiii_ff         ; 66                          ;
-;     ENA               ; 33                          ;
-;     plain             ; 33                          ;
-; cycloneiii_lcell_comb ; 91                          ;
-;     arith             ; 61                          ;
-;         2 data inputs ; 60                          ;
-;         3 data inputs ; 1                           ;
-;     normal            ; 30                          ;
-;         0 data inputs ; 1                           ;
-;         1 data inputs ; 3                           ;
-;         2 data inputs ; 5                           ;
-;         3 data inputs ; 1                           ;
-;         4 data inputs ; 20                          ;
+; boundary_port         ; 22                          ;
+; cycloneiii_lcell_comb ; 177                         ;
+;     arith             ; 31                          ;
+;         2 data inputs ; 31                          ;
+;     normal            ; 146                         ;
+;         1 data inputs ; 2                           ;
+;         2 data inputs ; 6                           ;
+;         3 data inputs ; 76                          ;
+;         4 data inputs ; 62                          ;
 ;                       ;                             ;
-; Max LUT depth         ; 4.10                        ;
-; Average LUT depth     ; 3.26                        ;
+; Max LUT depth         ; 6.10                        ;
+; Average LUT depth     ; 4.19                        ;
 +-----------------------+-----------------------------+
 
 
@@ -259,7 +372,7 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:00     ;
+; Top            ; 00:00:01     ;
 +----------------+--------------+
 
 
@@ -269,101 +382,212 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 22.1std.0 Build 915 10/25/2022 SC Lite Edition
-    Info: Processing started: Thu Apr 13 14:42:59 2023
+    Info: Processing started: Sat Apr 15 15:47:02 2023
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off uart -c uart
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
 Info (12021): Found 2 design units, including 1 entities, in source file uart.vhd
-    Info (12022): Found design unit 1: uart-rtl File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
-    Info (12023): Found entity 1: uart File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 9
+    Info (12022): Found design unit 1: uart-rtl File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 27
+    Info (12023): Found entity 1: uart File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 11
 Info (12127): Elaborating entity "uart" for the top level hierarchy
-Warning (10541): VHDL Signal Declaration warning at uart.vhd(14): used implicit default value for signal "LEDG" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-Warning (10541): VHDL Signal Declaration warning at uart.vhd(15): used implicit default value for signal "LEDR" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-Warning (10541): VHDL Signal Declaration warning at uart.vhd(19): used implicit default value for signal "UART_RTS" because signal was never assigned a value or an explicit default value. Use of implicit default value may introduce unintended design optimizations. File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 19
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(24): used explicit default value for signal "data" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 24
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(29): used explicit default value for signal "baudRate" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 29
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(55): used explicit default value for signal "sync_err" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 55
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(58): used explicit default value for signal "txDone" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 58
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(59): used explicit default value for signal "pkt_create_done" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 59
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(62): used explicit default value for signal "pkt_process_done" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 62
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(63): used explicit default value for signal "parity_err" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 63
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(64): used explicit default value for signal "parity_err_check_done" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 64
-Warning (10540): VHDL Signal Declaration warning at uart.vhd(65): used explicit default value for signal "rxDone" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 65
-Warning (10492): VHDL Process Statement warning at uart.vhd(100): signal "state" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 100
-Warning (10492): VHDL Process Statement warning at uart.vhd(125): signal "state" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 125
-Warning (10492): VHDL Process Statement warning at uart.vhd(127): signal "UART_CTS" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 127
-Warning (10492): VHDL Process Statement warning at uart.vhd(136): signal "sync_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 136
-Warning (10492): VHDL Process Statement warning at uart.vhd(138): signal "pkt_create_done" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 138
-Warning (10492): VHDL Process Statement warning at uart.vhd(145): signal "txDone" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 145
-Warning (10492): VHDL Process Statement warning at uart.vhd(145): signal "sync_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 145
-Warning (10492): VHDL Process Statement warning at uart.vhd(152): signal "sync_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 152
-Warning (10492): VHDL Process Statement warning at uart.vhd(154): signal "pkt_process_done" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 154
-Warning (10492): VHDL Process Statement warning at uart.vhd(161): signal "parity_err_check_done" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 161
-Warning (10492): VHDL Process Statement warning at uart.vhd(171): signal "rxDone" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 171
-Warning (13024): Output pins are stuck at VCC or GND
-    Warning (13410): Pin "LEDG[0]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[1]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[2]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[3]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[4]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[5]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[6]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDG[7]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 14
-    Warning (13410): Pin "LEDR[0]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[1]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[2]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[3]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[4]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[5]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[6]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[7]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[8]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[9]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[10]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[11]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[12]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[13]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[14]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[15]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[16]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "LEDR[17]" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 15
-    Warning (13410): Pin "UART_RTS" is stuck at GND File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 19
+Warning (10540): VHDL Signal Declaration warning at uart.vhd(38): used explicit default value for signal "number" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 38
+Warning (10540): VHDL Signal Declaration warning at uart.vhd(62): used explicit default value for signal "sync_err" because signal was never assigned a value File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 62
+Warning (10492): VHDL Process Statement warning at uart.vhd(92): signal "state" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 92
+Warning (10492): VHDL Process Statement warning at uart.vhd(112): signal "parityBit" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 112
+Warning (10492): VHDL Process Statement warning at uart.vhd(123): signal "i" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 123
+Warning (10492): VHDL Process Statement warning at uart.vhd(124): signal "packet" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 124
+Warning (10492): VHDL Process Statement warning at uart.vhd(124): signal "i" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 124
+Warning (10492): VHDL Process Statement warning at uart.vhd(125): signal "i" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 125
+Warning (10492): VHDL Process Statement warning at uart.vhd(140): signal "i" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 140
+Warning (10492): VHDL Process Statement warning at uart.vhd(141): signal "UART_RXD" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 141
+Warning (10492): VHDL Process Statement warning at uart.vhd(141): signal "i" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 141
+Warning (10492): VHDL Process Statement warning at uart.vhd(142): signal "i" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 142
+Warning (10492): VHDL Process Statement warning at uart.vhd(147): signal "rx_packet" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 147
+Warning (10492): VHDL Process Statement warning at uart.vhd(148): signal "rx_packet" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 148
+Warning (10492): VHDL Process Statement warning at uart.vhd(159): signal "rx_packet" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 159
+Warning (10492): VHDL Process Statement warning at uart.vhd(159): signal "data" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 159
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "UART_TXD", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "pkt_process_done", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "parity_err_check_done", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "i", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "packet", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "pkt_create_done", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "rx_packet", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "rxDone", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "rx_data", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10631): VHDL Process Statement warning at uart.vhd(90): inferring latch(es) for signal or variable "data", which holds its previous value in one or more paths through the process File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (10492): VHDL Process Statement warning at uart.vhd(178): signal "state" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 178
+Warning (10492): VHDL Process Statement warning at uart.vhd(181): signal "UART_CTS" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 181
+Warning (10492): VHDL Process Statement warning at uart.vhd(194): signal "sync_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 194
+Warning (10492): VHDL Process Statement warning at uart.vhd(196): signal "pkt_create_done" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 196
+Warning (10492): VHDL Process Statement warning at uart.vhd(203): signal "txDone" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 203
+Warning (10492): VHDL Process Statement warning at uart.vhd(203): signal "sync_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 203
+Warning (10492): VHDL Process Statement warning at uart.vhd(210): signal "sync_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 210
+Warning (10492): VHDL Process Statement warning at uart.vhd(212): signal "pkt_process_done" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 212
+Warning (10492): VHDL Process Statement warning at uart.vhd(219): signal "parity_err_check_done" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 219
+Warning (10492): VHDL Process Statement warning at uart.vhd(220): signal "parity_err" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 220
+Warning (10492): VHDL Process Statement warning at uart.vhd(229): signal "rxDone" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 229
+Info (10041): Inferred latch for "data[0]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[1]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[2]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[3]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[4]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[5]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[6]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "data[7]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[0]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[1]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[2]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[3]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[4]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[5]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[6]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_data[7]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rxDone" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[1]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[2]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[3]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[4]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[5]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[6]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[7]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[8]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "rx_packet[9]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "pkt_create_done" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[0]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[1]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[2]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[3]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[4]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[5]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[6]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[7]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[8]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[9]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "packet[10]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[0]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[1]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[2]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[3]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[4]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[5]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[6]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[7]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[8]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[9]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[10]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[11]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[12]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[13]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[14]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[15]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[16]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[17]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[18]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[19]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[20]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[21]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[22]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[23]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[24]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[25]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[26]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[27]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[28]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[29]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[30]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "i[31]" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "parity_err_check_done" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "pkt_process_done" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (10041): Inferred latch for "UART_TXD" at uart.vhd(90) File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Info (13025): Duplicate LATCH primitives merged into single LATCH primitive
+    Info (13026): Duplicate LATCH primitive "data[0]" merged with LATCH primitive "rx_data[0]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[1]" merged with LATCH primitive "rx_data[1]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[2]" merged with LATCH primitive "rx_data[2]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[3]" merged with LATCH primitive "rx_data[3]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[4]" merged with LATCH primitive "rx_data[4]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[5]" merged with LATCH primitive "rx_data[5]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[6]" merged with LATCH primitive "rx_data[6]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Info (13026): Duplicate LATCH primitive "data[7]" merged with LATCH primitive "rx_data[7]$latch" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (13012): Latch UART_TXD$latch has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal i[2] File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+Warning (13012): Latch i[31] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[4] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[5] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[6] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[7] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[8] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[9] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[10] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[11] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[12] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[13] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[14] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[15] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[16] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[17] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[18] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[19] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[20] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[21] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[22] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[23] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[24] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[25] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[26] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[27] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[28] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[29] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[30] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[3] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[2] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[0] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
+Warning (13012): Latch i[1] has unsafe behavior File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 90
+    Warning (13013): Ports D and ENA on the latch are fed by the same signal UART_RTS~1 File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 23
 Info (286030): Timing-Driven Synthesis is running
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Warning (21074): Design contains 24 input pin(s) that do not drive logic
-    Warning (15610): No output dependent on input pin "KEY[0]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 12
-    Warning (15610): No output dependent on input pin "KEY[1]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 12
-    Warning (15610): No output dependent on input pin "KEY[2]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 12
-    Warning (15610): No output dependent on input pin "KEY[3]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 12
-    Warning (15610): No output dependent on input pin "SW[0]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[1]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[2]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[3]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[4]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[5]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[6]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[7]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[8]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[9]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[10]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[11]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[12]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[13]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[14]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[15]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[16]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "SW[17]" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 13
-    Warning (15610): No output dependent on input pin "UART_RXD" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 17
-    Warning (15610): No output dependent on input pin "UART_CTS" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 18
-Info (21057): Implemented 144 device resources after synthesis - the final resource count might be different
-    Info (21058): Implemented 25 input pins
-    Info (21059): Implemented 28 output pins
-    Info (21061): Implemented 91 logic cells
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 77 warnings
-    Info: Peak virtual memory: 4793 megabytes
-    Info: Processing ended: Thu Apr 13 14:43:15 2023
-    Info: Elapsed time: 00:00:16
+Warning (21074): Design contains 1 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "FAST_CLOCK" File: C:/Users/Glorie/OneDrive - Simon Fraser University (1sfu)/School/Semesters/2023 SPRING/ENSC 350/Final Project/UART/uart.vhd Line: 16
+Info (21057): Implemented 198 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 12 input pins
+    Info (21059): Implemented 10 output pins
+    Info (21061): Implemented 176 logic cells
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 106 warnings
+    Info: Peak virtual memory: 4804 megabytes
+    Info: Processing ended: Sat Apr 15 15:47:19 2023
+    Info: Elapsed time: 00:00:17
     Info: Total CPU time (on all processors): 00:00:34
 
 

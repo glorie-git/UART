@@ -1,4 +1,6 @@
 -- final project: uart
+-- baurd rate = 9600
+-- clock = 50 000,000
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -8,31 +10,28 @@ use ieee.numeric_std.all;
 
 entity uart is
 	generic(
-			CLOCK_INT : integer := 50000000;
-			baudRate : integer := 9600
+			CLOCK_INT : integer := 50000000
 			);
 	 port(
 			FAST_CLOCK : in  std_logic;  -- Clock pin
-			DATA : in std_logic_vector(7 downto 0);
-			-- KEY : in  std_logic_vector(3 downto 0):= (others => '0');  -- push button switches
-			-- SW : in  std_logic_vector(17 downto 0) := (others => '0');  -- slider switches
-			-- LEDG : out std_logic_vector(7 downto 0);  -- green lights
-			-- LEDR : out std_logic_vector(17 downto 0);  -- red lights
+			transmitter : in std_logic := '0'; -- control signal, if 1 UART is transmitter
+			tx_data : in std_logic_vector(7 downto 0); -- tx input buffer
+			rx_data : out std_logic_vector(7 downto 0); -- rx output buffer
 			UART_TXD : out std_logic;
-			UART_RXD : in  std_logic; -- := 'X';
-			UART_CTS : in  std_logic; -- := '1';
+			UART_RXD : in  std_logic; -- := '0';
+			UART_CTS : in  std_logic; -- := '0';
 			UART_RTS : out std_logic
 		 );
 end uart;
 
 architecture rtl of uart is
-	signal tx_data : std_logic_vector(7 downto 0); -- := "11010000";
-	signal rx_data : std_logic_vector(7 downto 0); -- := "00000000";
-	signal packet : std_logic_vector(10 downto 0);
-	signal rx_packet : std_logic_vector(10 downto 0) := (others => 'X');
+	-- signal tx_data : std_logic_vector(7 downto 0); -- := "11010000";
+	signal data : std_logic_vector(7 downto 0); -- := "00000000";
+	signal packet : std_logic_vector(10 downto 0) := (others => '0');
+	signal rx_packet : std_logic_vector(10 downto 0) := (others => '0');
 	signal parityBit: std_logic;
 	signal i : integer := 0;
-	-- signal baudRate : integer := 9600;
+	constant baudRate : integer := 115200;
 	-- signal baudRate : integer := 10;
 	signal baudClock : std_logic := '0';
 	signal baudRateCounter : integer := 0;
@@ -49,7 +48,7 @@ architecture rtl of uart is
 		  v_parity := data(0);
         for i in 1 to data'length-1 loop
 				v_parity := v_parity xor data(i);
-		  end loop;
+		end loop;
 		  
         return v_parity;
     end function;
@@ -57,7 +56,7 @@ architecture rtl of uart is
 	 -- state machine
 	 type STATES is (idle, create_packet, transmit, process_bits, parity_check, store_display);
 	 signal state : states := idle;
-	 signal resetb : std_logic := '0';
+	--  signal resetb : std_logic := '0';
 	 
 	 -- constrol signals
 	 signal sync_err : std_logic := '0';
@@ -74,8 +73,8 @@ architecture rtl of uart is
 	 
 begin
 	
-	tx_data <= DATA;
-	parityBit <= calcParity(data);
+	-- tx_data <= DATA;
+	parityBit <= calcParity(tx_data);
 	
 	baudRateGenerator: process(FAST_CLOCK) is
 	begin
@@ -84,72 +83,80 @@ begin
 			if baudRateCounter = number then
 				baudClock <= not baudClock;
 				baudRateCounter <= 0;
-			-- else
-			-- 	baudClock <= '0';
 			end if;
 		end if;
 	end process;
 	 
-	fms : process (FAST_CLOCK, baudClock) is
+	fms : process (baudClock, transmitter, tx_data) is
 	begin
 		case state is
 			when idle =>
-				UART_RTS <= '1';
+				if transmitter = '1' then
+					UART_RTS <= '0'; -- if transmitter then do not assert RTS
+				else
+					UART_RTS <= '1'; -- if not transmitter and idle then assert other RTS
+				end if;
+				UART_TXD <= '1';
 				txDone <= '0';
 				parity_err <= '1';
 				pkt_process_done <= '0';
 				parity_err_check_done <= '0';
+				i <= 0;
 				
 			when create_packet =>
 				UART_RTS <= '0';
+				UART_TXD <= '1';
 				txDone <= '0';
 				parity_err <= '1';
 				pkt_process_done <= '0';
-				packet <= '0' & data & parityBit & '1';
+				packet <= '0' & tx_data & parityBit & '1';
 				
 				pkt_create_done <= '1';
 			when transmit =>
 				UART_RTS <= '0';
+				-- UART_TXD <= '0';
 				parity_err <= '1';
 				pkt_process_done <= '0';
 				parity_err_check_done <= '0';
 				
 				if rising_edge(baudClock) then
 					if i < 11 then
-						UART_TXD <= packet(i);
+						UART_TXD <= packet((10-i));
 						i <= i + 1;
 						txDone <= '0';
 					else
-						i <= 0;
 						txDone <= '1';
 					end if;
 				end if;
 
 			when process_bits =>
 				UART_RTS <= '0';
+				UART_TXD <= '1';
 				txDone <= '0';
 				parity_err <= '1';
 				parity_err_check_done <= '0';
 				
 				if rising_edge(baudClock) then
 					if i < 11 then
-						rx_packet(i) <= UART_RXD;
+						rx_packet((10-i)) <= UART_RXD;
 						i <= i + 1;
 						rxDone <= '0';
 					else
 						i <= 0;
 						pkt_process_done <= '1';
 						rx_data <= rx_packet(8 downto 1);
+						data <= rx_packet(8 downto 1);
 						rxDone <= '1';
 					end if;
 				end if;
 				
 			when parity_check =>
 				UART_RTS <= '0';
+				UART_TXD <= '1';
 				txDone <= '0';
 				pkt_process_done <= '0';
 				
-				if rx_packet(9) = calcParity(rx_data) then
+				if rx_packet(9) = calcParity(data) then
 					parity_err <= '0';
 				else
 					parity_err <= '1';
@@ -158,6 +165,7 @@ begin
 			
 			when store_display =>
 				UART_RTS <= '0';
+				UART_TXD <= '1';
 				txDone <= '0';
 				parity_err <= '1';
 				pkt_process_done <= '0';
@@ -165,16 +173,19 @@ begin
 		end case;
 	end process;
 	 
-	next_state_logic : process (FAST_CLOCK, baudClock, rx_packet) is
+	next_state_logic : process (baudClock, rx_packet, UART_RXD, transmitter) is
 	begin
 		case state is
 			when idle =>
-				if UART_CTS = '0' then -- if we want to transmit we check cts first
-					if rising_edge(baudClock) then
-						state <= process_bits;
-					end if;
-				elsif UART_CTS = '1' then
-					state <= create_packet;
+				-- if transmitter = '1' and UART_CTS = '1'  then -- if we want to transmit we check cts first
+				if transmitter = '1' and UART_CTS = '1'  then -- if we want to transmit we check cts first
+--					if rising_edge(baudClock) then
+						-- state <= process_bits;
+						state <= create_packet;
+--					end if;
+				elsif UART_RXD = '0' then
+					-- state <= create_packet;
+					state <= process_bits;
 				else
 					state <= idle;
 				end if;

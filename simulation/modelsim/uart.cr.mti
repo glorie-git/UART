@@ -6,5 +6,6 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package NUMERIC_STD
 -- Compiling entity tb_uart
 -- Compiling architecture tb of tb_uart
+-- Loading entity uart
 
 } {} {}}
