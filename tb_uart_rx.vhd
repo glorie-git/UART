@@ -43,8 +43,8 @@ signal UART_TXD, UART_TXD_B : std_logic;
 signal UART_RXD, UART_RXD_B :  std_logic := '1';
 signal UART_CTS, UART_CTS_B :  std_logic; -- := '0';
 signal UART_RTS, UART_RTS_B: std_logic;
-signal packet, test: std_logic_vector(10 downto 0);
-signal int : integer := 0;
+-- signal packet, test: std_logic_vector(10 downto 0);
+signal int, intii : integer := 0;
 
 -- We want to interface to 9600 baud UART
 -- 50000000 / 115200 = 5208
@@ -86,13 +86,12 @@ begin
         -- wait for 1042000 ps;
         for ii in test_case_array'low to test_case_array'high loop
             
-            -- wait until rising_edge(FAST_CLOCK);
-            packet <= test_case_array(ii).packet;
-
+            intii <= ii;
             wait until rising_edge(FAST_CLOCK);
+
             for i in packet'low to packet'high loop  
                 int <= i;
-                UART_RXD <= packet(10-i);
+                UART_RXD <= test_case_array(ii).packet(10-i);
                 wait for bit_period;
 
                 assert (test_case_array(ii).tx_data = rx_data)
@@ -100,6 +99,7 @@ begin
                 severity warning;
 
             end loop;
+            wait until rising_edge(UART_RTS);
         end loop;
 
         report "================== ALL TESTS PASSED =============================";
