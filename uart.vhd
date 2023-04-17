@@ -28,14 +28,14 @@ architecture rtl of uart is
 	-- signal tx_data : std_logic_vector(7 downto 0); -- := "11010000";
 	signal data : std_logic_vector(7 downto 0); -- := "00000000";
 	signal packet : std_logic_vector(10 downto 0) := (others => '0');
-	signal rx_packet : std_logic_vector(10 downto 0) := (others => '0');
+	signal rx_packet : std_logic_vector(10 downto 0);-- := (others => '0');
 	signal parityBit: std_logic;
-	signal i : integer := 0;
+	signal i, ii : integer := 0;
 	constant baudRate : integer := 115200;
 	-- signal baudRate : integer := 10;
 	signal baudClock : std_logic := '0';
 	signal baudRateCounter : integer := 0;
-	signal number : integer := CLOCK_INT/(2*baudRate);
+	signal number : integer := 434; -- CLOCK_INT/(2*baudRate);
 	
 	-- https://surf-vhdl.com/vhdl-for-loop-statement/#:~:text=The%20FOR%2DLOOP%20statement%20is%20used%20whenever%20an%20operation%20needs,in%20the%20other%20SW%20languages.
 	-- https://vhdlwhiz.com/function/
@@ -76,32 +76,34 @@ begin
 	-- tx_data <= DATA;
 	parityBit <= calcParity(tx_data);
 	
-	baudRateGenerator: process(FAST_CLOCK) is
-	begin
-		if rising_edge(FAST_CLOCK) then
-			baudRateCounter <= baudRateCounter + 1;
-			if baudRateCounter = number then
-				baudClock <= not baudClock;
-				baudRateCounter <= 0;
-			end if;
-		end if;
-	end process;
+	-- baudRateGenerator: process(FAST_CLOCK) is
+	-- begin
+	-- 	if rising_edge(FAST_CLOCK) then
+	-- 		baudRateCounter <= baudRateCounter + 1;
+	-- 		if baudRateCounter = number then
+	-- 			baudClock <= not baudClock;
+	-- 			baudRateCounter <= 0;
+	-- 		end if;
+	-- 	end if;
+	-- end process;
 	 
-	fms : process (baudClock, transmitter, tx_data) is
+	fms : process (FAST_CLOCK, transmitter) is
 	begin
 		case state is
 			when idle =>
-				if transmitter = '1' then
-					UART_RTS <= '0'; -- if transmitter then do not assert RTS
-				else
-					UART_RTS <= '1'; -- if not transmitter and idle then assert other RTS
-				end if;
+				-- if transmitter = '1' then
+				-- 	UART_RTS <= '0'; -- if transmitter then do not assert RTS
+				-- else
+				-- 	UART_RTS <= '1'; -- if not transmitter and idle then assert other RTS
+				-- end if;
+				UART_RTS <= '1';
 				UART_TXD <= '1';
 				txDone <= '0';
 				parity_err <= '1';
 				pkt_process_done <= '0';
 				parity_err_check_done <= '0';
 				i <= 0;
+				ii <= 0;
 				
 			when create_packet =>
 				UART_RTS <= '0';
@@ -114,20 +116,32 @@ begin
 				pkt_create_done <= '1';
 			when transmit =>
 				UART_RTS <= '0';
-				-- UART_TXD <= '0';
 				parity_err <= '1';
 				pkt_process_done <= '0';
 				parity_err_check_done <= '0';
 				
-				if rising_edge(baudClock) then
-					if i < 11 then
-						UART_TXD <= packet((10-i));
-						i <= i + 1;
+				
+				
+
+				-- wait number-1 clock cylces before sending others bits
+				if baudRateCounter < number then
+					baudRateCounter <= baudRateCounter + 1;
+				else
+					baudRateCounter <= 0;
+					baudClock <= not baudClock;
+
+					-- check if we have sent out all the bits
+					if ii < 10 then
+						-- UART_TXD <= packet((10-ii));
+						ii <= ii + 1;
 						txDone <= '0';
 					else
 						txDone <= '1';
 					end if;
 				end if;
+
+				-- send bit
+				UART_TXD <= packet((10-ii));
 
 			when process_bits =>
 				UART_RTS <= '0';
@@ -135,20 +149,30 @@ begin
 				txDone <= '0';
 				parity_err <= '1';
 				parity_err_check_done <= '0';
-				
-				if rising_edge(baudClock) then
-					if i < 11 then
-						rx_packet((10-i)) <= UART_RXD;
+
+				if baudRateCounter < number/2 then
+					rx_packet((10-i)) <= UART_RXD; -- sample at middle
+				end if;
+
+				if baudRateCounter < number then
+					baudRateCounter <= baudRateCounter + 1;
+				else
+					baudRateCounter <= 0;
+					baudClock <= not baudClock;
+					-- rx_packet((10-i)) <= UART_RXD;
+					if i < 10 then
+						-- rx_packet((10-i)) <= UART_RXD;
 						i <= i + 1;
 						rxDone <= '0';
 					else
 						i <= 0;
 						pkt_process_done <= '1';
-						rx_data <= rx_packet(8 downto 1);
-						data <= rx_packet(8 downto 1);
+						rx_data <= rx_packet(9 downto 2);
+						data <= rx_packet(9 downto 2);
 						rxDone <= '1';
 					end if;
 				end if;
+				
 				
 			when parity_check =>
 				UART_RTS <= '0';
@@ -156,7 +180,7 @@ begin
 				txDone <= '0';
 				pkt_process_done <= '0';
 				
-				if rx_packet(9) = calcParity(data) then
+				if rx_packet(1) = calcParity(data) then
 					parity_err <= '0';
 				else
 					parity_err <= '1';
@@ -170,10 +194,12 @@ begin
 				parity_err <= '1';
 				pkt_process_done <= '0';
 				parity_err_check_done <= '0';	
+
+				
 		end case;
 	end process;
 	 
-	next_state_logic : process (baudClock, rx_packet, UART_RXD, transmitter) is
+	next_state_logic : process (FAST_CLOCK, UART_RXD, transmitter) is
 	begin
 		case state is
 			when idle =>

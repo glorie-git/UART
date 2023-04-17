@@ -4,10 +4,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity tb_uart_rx is
-end entity tb_uart_rx;
+entity tb_uart_tx is
+end entity tb_uart_tx;
 
-architecture tb of tb_uart_rx is
+architecture tb of tb_uart_tx is
 
  -- Define the record that describes one test vector
    
@@ -19,7 +19,7 @@ architecture tb of tb_uart_rx is
 
 --    Define a type that is an array of the record.
 
-   TYPE test_case_array_type IS ARRAY (0 to 5) OF test_case_record;
+   TYPE test_case_array_type IS ARRAY (0 to 4) OF test_case_record;
      
 --    Define the array itself.  We will initialize it, one line per test vector.
 --    If we want to add more tests, or change the tests, we can do it here.
@@ -32,8 +32,7 @@ architecture tb of tb_uart_rx is
         ("11010011", "11010011","01101001111"),
         ("11000110","11000110","01100011001"),
         ("00011100","00011100","00001110011"),
-        ("10010110","10010110","01001011001"),
-        ("10010110","10010110","01001011011") -- wrong parity bit
+        ("10010110","10010110","01001011001") 
         );   
 
 signal FAST_CLOCK :  std_logic := '0';  -- Clock pin
@@ -44,11 +43,11 @@ signal UART_TXD, UART_TXD_B : std_logic;
 signal UART_RXD, UART_RXD_B :  std_logic := '1';
 signal UART_CTS, UART_CTS_B :  std_logic; -- := '0';
 signal UART_RTS, UART_RTS_B: std_logic;
-signal packet: std_logic_vector(10 downto 0);
-signal int, intii : integer := 0;
+signal rx_packet, test: std_logic_vector(10 downto 0);
+signal int, intii : integer ;
 
 -- We want to interface to 9600 baud UART
--- 50000000 / 115200 = 5208
+-- 50000000 / 115200 = 434
 constant clks_per_bit : integer := 434;
 
 -- Test Bench uses a 50 Mhz Clock
@@ -58,8 +57,6 @@ constant clk_period : time := 20 ns;
 constant bit_period : time := 8680 ns;
 
 signal clock : std_logic;
-
--- constant transmit_wait : integer := 50000000/9600;
 
 begin
     -- dut : uart port map (CLOCK_50, UART_TXD, UART_RXD, UART_CTS, UART_RTS);
@@ -75,8 +72,9 @@ begin
             UART_CTS => UART_CTS, 
             UART_RTS => UART_RTS);
 
-    UART_CTS <= '0';
-    transmitter <= '0';    
+   
+    transmitter <= '1';  
+    UART_CTS <= '1';  
     -- packet <= "01101000011";
 
     FAST_CLOCK <= not FAST_CLOCK after clk_period/2;
@@ -84,38 +82,33 @@ begin
     process
     begin
 
-        -- wait for 1042000 ps;
         for ii in test_case_array'low to test_case_array'high loop
             
             intii <= ii;
-            -- wait until rising_edge(FAST_CLOCK);
 
+            tx_data <= test_case_array(ii).tx_data;
+
+            wait until UART_TXD = '0'; -- detect that first bit is being sent
             for i in test_case_array(ii).packet'low to test_case_array(ii).packet'high loop  
-                int <= i;     
-                UART_RXD <= test_case_array(ii).packet(10-i);
-                packet(10-i) <= test_case_array(ii).packet(10-i);
+                       
+                int <= i; -- for debugging
                 wait for bit_period/2;
-
-                rx_data_B <= rx_data;
+                rx_packet(10-i) <= UART_TXD;
             end loop;
 
-            wait for bit_period/2;
-
             report "Expected result= " &  
-                    integer'image(to_integer(unsigned(test_case_array(ii).tx_data))) &
+                    integer'image(to_integer(unsigned(test_case_array(ii).packet))) &
             "  Actual result= " &  
-                    integer'image(to_integer(unsigned(rx_data)));
-            assert (test_case_array(ii).tx_data = rx_data)
-            report "MISMATCH.  THERE IS A PROBLEM IN YOUR DESIGN THAT YOU NEED TO FIX"
-            severity warning;
+                    integer'image(to_integer(unsigned(rx_packet)));
+            assert (test_case_array(ii).packet = rx_packet)
+                report "MISMATCH.  THERE IS A PROBLEM IN YOUR DESIGN THAT YOU NEED TO FIX"
+                severity warning;
 
         end loop;
-
 
         report "================== ALL TESTS PASSED =============================";
                                                                                 
         wait; --- we are done.  Wait for ever
-        
     end process;
 
 end tb;
